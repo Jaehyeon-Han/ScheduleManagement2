@@ -1,0 +1,9 @@
+.openapi-generator-ignore
+Apis/DefaultApi.md
+Models/CreateUserRequest.md
+Models/ErrorResponse.md
+Models/FieldErrorResponse.md
+Models/UpdateUserRequest.md
+Models/UserResponse.md
+Models/access-date-time.md
+README.md
