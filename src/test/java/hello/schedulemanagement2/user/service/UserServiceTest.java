@@ -1,5 +1,7 @@
 package hello.schedulemanagement2.user.service;
 
+import hello.schedulemanagement2.config.PasswordEncoder;
+import hello.schedulemanagement2.entity.User;
 import hello.schedulemanagement2.global.error.exception.ForbiddenException;
 import hello.schedulemanagement2.global.error.exception.IdenticalUserExistException;
 import hello.schedulemanagement2.global.error.exception.UserNotFoundException;
@@ -7,6 +9,7 @@ import hello.schedulemanagement2.user.dto.request.ChangePasswordRequest;
 import hello.schedulemanagement2.user.dto.request.CreateUserRequest;
 import hello.schedulemanagement2.user.dto.request.DeleteUserRequest;
 import hello.schedulemanagement2.user.dto.response.UserResponse;
+import hello.schedulemanagement2.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,12 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     private Long godUserId;
 
     private static final long INVALID_ID = 999999L;
@@ -35,10 +44,11 @@ class UserServiceTest {
         String email = "god@heaven.world";
         String password = "iamgod";
         String name = "god";
-        CreateUserRequest createUserRequest = new CreateUserRequest(email, password, name);
 
-        UserResponse userResponse = userService.saveUser(createUserRequest);
-        godUserId = userResponse.getId();
+        User user = new User(name, email, passwordEncoder.encode(password));
+        User savedUser = userRepository.save(user);
+
+        godUserId = savedUser.getId();
     }
 
     @DisplayName("정상 회원가입 성공")
@@ -70,7 +80,7 @@ class UserServiceTest {
         // given
         String email = "god@heaven.world";
         String password = "iamgod";
-        String name = "god";
+        String name = "anothergod";
         CreateUserRequest createUserRequest = new CreateUserRequest(email, password, name);
 
         // when-then

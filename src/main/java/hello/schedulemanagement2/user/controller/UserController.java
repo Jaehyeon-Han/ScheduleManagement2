@@ -1,5 +1,6 @@
 package hello.schedulemanagement2.user.controller;
 
+import hello.schedulemanagement2.global.constant.SessionConst;
 import hello.schedulemanagement2.user.dto.request.CreateUserRequest;
 import hello.schedulemanagement2.user.dto.request.ChangePasswordRequest;
 import hello.schedulemanagement2.user.dto.request.DeleteUserRequest;
@@ -28,30 +29,30 @@ public class UserController {
         return ResponseEntity.ok(userResponsePage);
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<UserResponse> saveUser(
         @RequestBody @Valid CreateUserRequest createUserRequest) {
         UserResponse userResponse = userService.saveUser(createUserRequest);
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> findUserById(@PathVariable long userId) {
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> findUserById(@SessionAttribute(name = SessionConst.LOGIN_USER) Long userId) {
         UserResponse userResponse = userService.findUserById(userId);
         return ResponseEntity.ok(userResponse);
     }
 
-    @PatchMapping("/{userId}")
+    @PatchMapping("/me")
     public ResponseEntity<UserResponse> updateUserById(
-        @PathVariable long userId,
+        @SessionAttribute(name = SessionConst.LOGIN_USER) Long userId,
         @RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
         UserResponse userResponse = userService.changePasswordById(userId, changePasswordRequest);
         return ResponseEntity.ok(userResponse);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/me")
     public ResponseEntity<Void> deleteUserById(
-        @PathVariable long userId,
+        @SessionAttribute(name = SessionConst.LOGIN_USER) Long userId,
         @RequestBody @Valid DeleteUserRequest deleteUserRequest) {
         userService.deleteUserById(userId, deleteUserRequest);
         return ResponseEntity.noContent().build();

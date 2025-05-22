@@ -20,7 +20,7 @@ public class ErrorResponse {
         this.instance = instance;
     }
 
-    public void addFieldError(String field, String reason) {
+    public void addFieldErrorResponse(String field, String reason) {
         FieldErrorResponse fieldErrorResponse = new FieldErrorResponse(field, reason);
         errors.add(fieldErrorResponse);
     }

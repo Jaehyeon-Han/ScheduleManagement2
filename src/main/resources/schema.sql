@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE `Users`
 (
     `user_id`          bigint AUTO_INCREMENT COMMENT '고유 식별자',
-    `email`            varchar(50) NOT NULL COMMENT '이메일',
+    `email`            varchar(50) NOT NULL UNIQUE COMMENT '이메일',
     `password`         varchar(20) NOT NULL COMMENT '비밀번호',
     `name`             varchar(50) NOT NULL COMMENT '이름',
     `created_at`       timestamp   NOT NULL COMMENT '작성일',

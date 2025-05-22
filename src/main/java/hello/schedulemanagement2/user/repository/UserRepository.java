@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(id).stream().findAny().orElseThrow(UserNotFoundException::new);
     }
 
-    Optional<User> findByNameAndEmail(String name, String email);
+    Optional<User> findByEmail(String email);
 }

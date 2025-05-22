@@ -11,7 +11,6 @@ import hello.schedulemanagement2.user.dto.response.UserResponse;
 import hello.schedulemanagement2.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -34,7 +32,7 @@ public class UserService {
         String password = createUserRequest.getPassword();
 
         // 중복 회원 존재 여부 확인
-        Optional<User> identicalUser = userRepository.findByNameAndEmail(name, email);
+        Optional<User> identicalUser = userRepository.findByEmail(email);
         if (identicalUser.isPresent()) {
             throw new IdenticalUserExistException();
         }
@@ -74,7 +72,7 @@ public class UserService {
     }
 
     public void deleteUserById(long userId, DeleteUserRequest deleteUserRequest) {
-        // 비밀번호 확인, 불일치 시 ForbiddenException 발생
+        // 삭제 시 비밀번호 재확인, 불일치 시 ForbiddenException 발생
         User foundUser = userRepository.findUserByIdOrElseThrow(userId);
         String requestPassword = deleteUserRequest.getCurrentPassword();
         checkPasswordMatchesOrElseThrow(foundUser.getPasswordHash(), requestPassword);
@@ -87,7 +85,7 @@ public class UserService {
 
         // 비밀번호 불일치 시 요청 거절
         if (!passwordMatches) {
-            throw new ForbiddenException();
+            throw new ForbiddenException("비밀번호가 일치하지 않습니다.");
         }
     }
 }
