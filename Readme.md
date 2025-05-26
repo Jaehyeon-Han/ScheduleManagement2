@@ -43,36 +43,37 @@ ALTER TABLE `Schedules`
 
 ## 인증 없이 접근 가능한 엔드포인트
 
-| 기능   | Method | url           | 요청                                                                                                                             | 응답                     |
-|------|--------|---------------|--------------------------------------------------------------------------------------------------------------------------------|------------------------|
-| 로그인  | POST   | /login        | 요청 body<br>- email(String): 가입한 이메일, 필수<br>- password(String): 사용자 비밀번호, 필수, 1-20글자<br>                                        | 204                    |
-| 로그아웃 | POST   | /logout       | .                                                                                                                              | 204                    |
-| 회원가입 | POST   | /users/signup | 요청 body<br>- email(String): 가입할 이메일, 필수<br>- password(String): 사용자 비밀번호, 필수, 1-20글자<br>- name(String): 사용자 이름, 필수, 2-50 글자<br> | 201, UserResponse JSON |
+| 기능   | Method | url           | 요청                                                                                                                             | 응답                  |
+|------|--------|---------------|--------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| 로그인  | POST   | /login        | 요청 body<br>- email(string): 가입한 이메일, 필수<br>- password(string): 사용자 비밀번호, 필수, 1-20글자<br>                                        | 204                 |
+| 로그아웃 | POST   | /logout       | .                                                                                                                              | 204                 |
+| 회원가입 | POST   | /users/signup | 요청 body<br>- email(string): 가입할 이메일, 필수<br>- password(string): 사용자 비밀번호, 필수, 1-20글자<br>- name(string): 사용자 이름, 필수, 2-50 글자<br> | 201, `UserResponse` |
 
 ## 인증이 필요한 엔드포인트
 
 ### 사용자 관련 API
 
-| 기능              | Method    | url                                                   | 요청                                                                                                                                           | 응답                      |
-|-----------------|-----------|-------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| 유저 목록 페이지 조회    | GET       | /users                                                | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 createdAt<br> | 200, Page<UserResponse> |
-| 자신의 정보 조회       | GET       | /users/me                                             | .                                                                                                                                            | 200, UserResponse       |
-| 자신의 정보(비밀번호) 수정 | PATCH     | /users/me                                             | 요청 body<br>- currentPassword(string): 현재 비밀번호, 필수<br>- newPassword: 새 비밀번호, 필수, 1-20자<br>                                                    | 200, UserResponse       |
-| 자신의 정보 삭제(탈퇴)   | DELETE    | /users/me                                             | 요청 body<br>- currentPassword(string): 현재 비밀번호, 필수<br>                                                                                        | 204                     |
-| DELETE          | /users/me | 요청 body<br>- currentPassword(string): 현재 비밀번호, 필수<br> | 204                                                                                                                                          |
+| 기능              | Method | url       | 요청                                                                                                                                           | 응답                        |
+|-----------------|--------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| 유저 목록 페이지 조회    | GET    | /users    | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 createdAt<br> | 200, `Page<UserResponse>` |
+| 자신의 정보 조회       | GET    | /users/me | .                                                                                                                                            | 200, `UserResponse`       |
+| 자신의 정보(비밀번호) 수정 | PATCH  | /users/me | 요청 body<br>- currentPassword(string): 현재 비밀번호, 필수<br>- newPassword: 새 비밀번호, 필수, 1-20자<br>                                                    | 200, `UserResponse`       |
+| 자신의 정보 삭제(탈퇴)   | DELETE | /users/me | 요청 body<br>- currentPassword(string): 현재 비밀번호, 필수<br>                                                                                        | 204                       |
 
 ### 할일 관련 API
 
-| 기능        | Method | url             | 요청                                                                                                                                                   | 응답                                 |
-|-----------|--------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
-| 할일 등록     | POST   | /schedules      | 요청 body<br>- title(string): 할일 제목, 필수, 1-30자<br>- content(string): 내용, 필수, 500자 이내, 공백 가능<br>                                                        | 201, location 헤더, ScheduleResponse |
-| 할일 페이지 조회 | GET    | /schedules      | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 <br>lastUpdatedAt<br> | 200, Page<ScheduleResponse>        |
-| 할일 단건 조회  | GET    | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 200, ScheduleResponse              |
-| 할일 수정     | PATCH  | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>요청 body<br>- title(string): 수정할 제목, 1-30자<br>- content(string): 수정할 내용, 500자 이내<br>                                   | 200, ScheduleResponse              |
-| 할일 삭제     | DELETE | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 204                                |
+| 기능        | Method | url             | 요청                                                                                                                                                   | 응답                                   |
+|-----------|--------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
+| 할일 등록     | POST   | /schedules      | 요청 body<br>- title(string): 할일 제목, 필수, 1-30자<br>- content(string): 내용, 필수, 500자 이내, 공백 가능<br>                                                        | 201, location 헤더, `ScheduleResponse` |
+| 할일 페이지 조회 | GET    | /schedules      | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 <br>lastUpdatedAt<br> | 200, `Page<ScheduleResponse>`        |
+| 할일 단건 조회  | GET    | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 200, `ScheduleResponse`              |
+| 할일 수정     | PATCH  | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>요청 body<br>- title(string): 수정할 제목, 1-30자<br>- content(string): 수정할 내용, 500자 이내<br>                                   | 200, `ScheduleResponse`              |
+| 할일 삭제     | DELETE | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 204                                  | 
 
 ## 응답 예시
+
 ### 정상 응답
+
 1. `UserResponse`
     ```json
     {
@@ -94,7 +95,7 @@ ALTER TABLE `Schedules`
         "lastUpdatedAt": "2025-05-26T12:13:39.9403682"
     }
     ```
-   
+
 3. `Page<UserResponse>`
     ```json
     {
@@ -150,26 +151,28 @@ ALTER TABLE `Schedules`
     ```
 
 ### 오류 응답
+
 필드를 입력하지 않고 `/login`에 요청을 보낸 경우
 
 ```json
 {
-    "title": "Bad Request",
-    "detail": "입력값을 다시 확인하세요",
-    "status": 400,
-    "instance": "/login",
-    "errors": [
-        {
-            "field": "email",
-            "reason": "이메일을 입력하세요."
-        },
-        {
-            "field": "password",
-            "reason": "비밀번호를 입력하세요."
-        }
-    ]
+  "title": "Bad Request",
+  "detail": "입력값을 다시 확인하세요",
+  "status": 400,
+  "instance": "/login",
+  "errors": [
+    {
+      "field": "email",
+      "reason": "이메일을 입력하세요."
+    },
+    {
+      "field": "password",
+      "reason": "비밀번호를 입력하세요."
+    }
+  ]
 }
 ```
+
 위와 같은 응답이 반환된다. 다른 모든 경우에도 응답 형식은 동일하다.
 
 - title: HTTP 상태코드에 해당하는 메시지
@@ -177,5 +180,5 @@ ALTER TABLE `Schedules`
 - status: HTTP 상태코드
 - instance: 요청 url
 - errors: 입력값 검증 실패 시 관련 정보
-  - field: 검증 실패한 JSON 필드명
-  - reason: 검증 실패 이유
+    - field: 검증 실패한 JSON 필드명
+    - reason: 검증 실패 이유
