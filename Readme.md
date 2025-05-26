@@ -62,13 +62,13 @@ ALTER TABLE `Schedules`
 
 ### 할일 관련 API
 
-| 기능        | Method | url             | 요청                                                                                                                                                   | 응답                                   |
-|-----------|--------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| 할일 등록     | POST   | /schedules      | 요청 body<br>- title(string): 할일 제목, 필수, 1-30자<br>- content(string): 내용, 필수, 500자 이내, 공백 가능<br>                                                        | 201, location 헤더, `ScheduleResponse` |
-| 할일 페이지 조회 | GET    | /schedules      | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 <br>lastUpdatedAt<br> | 200, `Page<ScheduleResponse>`        |
-| 할일 단건 조회  | GET    | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 200, `ScheduleResponse`              |
-| 할일 수정     | PATCH  | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>요청 body<br>- title(string): 수정할 제목, 1-30자<br>- content(string): 수정할 내용, 500자 이내<br>                                   | 200, `ScheduleResponse`              |
-| 할일 삭제     | DELETE | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 204                                  | 
+| 기능        | Method | url             | 요청                                                                                                                                                   | 응답                            |
+|-----------|--------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
+| 할일 등록     | POST   | /schedules      | 요청 body<br>- title(string): 할일 제목, 필수, 1-30자<br>- content(string): 내용, 필수, 500자 이내, 공백 가능<br>                                                        | 201, `ScheduleResponse`       |
+| 할일 페이지 조회 | GET    | /schedules      | 요청 파라미터<br>- page(integer): 조회할 페이지, 0부터 시작, 기본값 0<br>- size(integer): 한 페이지에 있는 사용자 정보 개수, 기본 10<br>- sort(string): 정렬 기준, 기본 <br>lastUpdatedAt<br> | 200, `Page<ScheduleResponse>` |
+| 할일 단건 조회  | GET    | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 200, `ScheduleResponse`       |
+| 할일 수정     | PATCH  | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>요청 body<br>- title(string): 수정할 제목, 1-30자<br>- content(string): 수정할 내용, 500자 이내<br>                                   | 200, `ScheduleResponse`       |
+| 할일 삭제     | DELETE | /schedules/{id} | 경로<br>- id(integer): 할일 식별자<br>                                                                                                                      | 204                           | 
 
 ## 응답 예시
 
