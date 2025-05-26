@@ -50,7 +50,7 @@ public class UserService {
     }
 
     public UserResponse findUserById(long userId) {
-        User foundUser = userRepository.findUserByIdOrElseThrow(userId);
+        User foundUser = userRepository.findByIdOrThrow(userId);
 
         return UserResponse.fromUser(foundUser);
     }
@@ -58,10 +58,10 @@ public class UserService {
     public UserResponse changePasswordById(long userId, @Valid ChangePasswordRequest changePasswordRequest) {
 
         // 비밀번호 확인, 불일치 시 ForbiddenException 발생
-        User foundUser = userRepository.findUserByIdOrElseThrow(userId);
+        User foundUser = userRepository.findByIdOrThrow(userId);
         String currentPassword = changePasswordRequest.getCurrentPassword();
         String newPassword = changePasswordRequest.getNewPassword();
-        checkPasswordMatchesOrElseThrow(foundUser.getPasswordHash(), currentPassword);
+        checkPasswordMatchesOrElseThrowForbidden(foundUser.getPasswordHash(), currentPassword);
 
         String newPasswordHash = passwordEncoder.encode(newPassword);
         foundUser.setPasswordHash(newPasswordHash);
@@ -73,14 +73,14 @@ public class UserService {
 
     public void deleteUserById(long userId, DeleteUserRequest deleteUserRequest) {
         // 삭제 시 비밀번호 재확인, 불일치 시 ForbiddenException 발생
-        User foundUser = userRepository.findUserByIdOrElseThrow(userId);
+        User foundUser = userRepository.findByIdOrThrow(userId);
         String requestPassword = deleteUserRequest.getCurrentPassword();
-        checkPasswordMatchesOrElseThrow(foundUser.getPasswordHash(), requestPassword);
+        checkPasswordMatchesOrElseThrowForbidden(foundUser.getPasswordHash(), requestPassword);
 
         userRepository.delete(foundUser);
     }
 
-    private void checkPasswordMatchesOrElseThrow(String savedPasswordHash, String requestPassword) {
+    private void checkPasswordMatchesOrElseThrowForbidden(String savedPasswordHash, String requestPassword) {
         boolean passwordMatches = passwordEncoder.matches(requestPassword, savedPasswordHash);
 
         // 비밀번호 불일치 시 요청 거절

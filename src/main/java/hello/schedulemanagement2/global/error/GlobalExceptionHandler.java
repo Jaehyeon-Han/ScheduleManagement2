@@ -3,10 +3,11 @@ package hello.schedulemanagement2.global.error;
 import hello.schedulemanagement2.global.error.exception.ForbiddenException;
 import hello.schedulemanagement2.global.error.exception.IdenticalUserExistException;
 import hello.schedulemanagement2.global.error.exception.LoginFailException;
-import hello.schedulemanagement2.global.error.exception.UserNotFoundException;
+import hello.schedulemanagement2.global.error.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,6 +15,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    // 기본 404 예외 등도 응답 형식을 맞춰주려면 별도의 ErrorController가 필요
+    
+    // JSON 형식 에러
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleMalformedJson(HttpServletRequest request) {
+        // createErrorResponseResponseEntity()는 예외에 커스텀 예외를 가정하여 직접 메시지를 넣은 경우, 해당 메시지를 우선시하는데
+        // HttpMessageNotReadableException은 ex에 Jackson의 예외 메시지가 담겨서 와서 별도 처리
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            status.getReasonPhrase(),
+            "입력값을 다시 확인하세요",
+            status.value(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status.value()).body(errorResponse);
+    }
 
     // 빈 검증 에러
     @ExceptionHandler
@@ -48,10 +68,9 @@ public class GlobalExceptionHandler {
         return createErrorResponseResponseEntity(ex, HttpStatus.CONFLICT, "해당 이메일로 가입한 사용자가 있습니다.", request);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFoundException(HttpServletRequest request) {
-        // Todo
-        return null;
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(NotFoundException ex, HttpServletRequest request) {
+        return createErrorResponseResponseEntity(ex, HttpStatus.NOT_FOUND, "리소스가 없습니다.", request);
     }
 
     @ExceptionHandler(ForbiddenException.class)
@@ -63,8 +82,7 @@ public class GlobalExceptionHandler {
         Exception ex,
         HttpStatus status,
         String detail,
-        HttpServletRequest request)
-    {
+        HttpServletRequest request) {
         if (ex.getMessage() != null) {
             detail = ex.getMessage();
         }

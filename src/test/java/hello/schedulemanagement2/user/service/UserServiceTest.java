@@ -4,7 +4,7 @@ import hello.schedulemanagement2.config.PasswordEncoder;
 import hello.schedulemanagement2.entity.User;
 import hello.schedulemanagement2.global.error.exception.ForbiddenException;
 import hello.schedulemanagement2.global.error.exception.IdenticalUserExistException;
-import hello.schedulemanagement2.global.error.exception.UserNotFoundException;
+import hello.schedulemanagement2.global.error.exception.NotFoundException;
 import hello.schedulemanagement2.user.dto.request.ChangePasswordRequest;
 import hello.schedulemanagement2.user.dto.request.CreateUserRequest;
 import hello.schedulemanagement2.user.dto.request.DeleteUserRequest;
@@ -108,7 +108,7 @@ class UserServiceTest {
         // given (@BeforeEach)
 
         // when-then
-        assertThrows(UserNotFoundException.class, () -> userService.findUserById(INVALID_ID));
+        assertThrows(NotFoundException.class, () -> userService.findUserById(INVALID_ID));
     }
 
     @DisplayName("비밀번호 정상 변경")
@@ -151,7 +151,7 @@ class UserServiceTest {
         userService.deleteUserById(godUserId, request);
 
         // then
-        assertThrows(UserNotFoundException.class, () -> userService.findUserById(1));
+        assertThrows(NotFoundException.class, () -> userService.findUserById(1));
     }
 
     @DisplayName("비밀번호 불일치로 삭제 실패")
